@@ -20,7 +20,7 @@ class VoucherGenerator
     }
 
     /**
-     * @param string $prefix
+     * @param string|null $prefix
      */
     public function setPrefix(?string $prefix): void
     {
@@ -28,7 +28,7 @@ class VoucherGenerator
     }
 
     /**
-     * @param string $suffix
+     * @param string|null $suffix
      */
     public function setSuffix(?string $suffix): void
     {

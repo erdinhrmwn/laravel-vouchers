@@ -2,6 +2,7 @@
 
 namespace BeyondCode\Vouchers;
 
+use BeyondCode\Vouchers\Exceptions\VoucherAlreadyMaxUsed;
 use BeyondCode\Vouchers\Exceptions\VoucherExpired;
 use BeyondCode\Vouchers\Exceptions\VoucherIsInvalid;
 use BeyondCode\Vouchers\Models\Voucher;
@@ -11,7 +12,7 @@ class Vouchers
 {
     /** @var VoucherGenerator */
     private $generator;
-    /** @var \BeyondCode\Vouchers\Models\Voucher  */
+    /** @var Voucher */
     private $voucherModel;
 
     public function __construct(VoucherGenerator $generator)
@@ -43,9 +44,10 @@ class Vouchers
      * @param int $amount
      * @param array $data
      * @param null $expires_at
+     * @param int $use_count
      * @return array
      */
-    public function create(Model $model, int $amount = 1, array $data = [], $expires_at = null)
+    public function create(Model $model, int $amount = 1, array $data = [], $expires_at = null, int $use_count = 1): array
     {
         $vouchers = [];
 
@@ -56,6 +58,8 @@ class Vouchers
                 'code' => $voucherCode,
                 'data' => $data,
                 'expires_at' => $expires_at,
+                'use_count' => $use_count,
+                'used_count' => ($use_count == 1) ? null : 0
             ]);
         }
 
@@ -64,12 +68,14 @@ class Vouchers
 
     /**
      * @param string $code
-     * @throws VoucherIsInvalid
-     * @throws VoucherExpired
      * @return Voucher
+     * @throws VoucherExpired
+     * *@throws VoucherAlreadyMaxUsed
+     * @throws VoucherIsInvalid
      */
     public function check(string $code)
     {
+        /** @var Voucher $voucher */
         $voucher = $this->voucherModel->whereCode($code)->first();
 
         if (is_null($voucher)) {
@@ -77,6 +83,9 @@ class Vouchers
         }
         if ($voucher->isExpired()) {
             throw VoucherExpired::create($voucher);
+        }
+        if($voucher->isMaxUsed()){
+            throw VoucherAlreadyMaxUsed::create($voucher);
         }
 
         return $voucher;

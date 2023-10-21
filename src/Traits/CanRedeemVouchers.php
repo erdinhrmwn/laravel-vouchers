@@ -2,6 +2,7 @@
 
 namespace BeyondCode\Vouchers\Traits;
 
+use BeyondCode\Vouchers\Exceptions\VoucherAlreadyMaxUsed;
 use BeyondCode\Vouchers\Facades\Vouchers;
 use BeyondCode\Vouchers\Models\Voucher;
 use BeyondCode\Vouchers\Events\VoucherRedeemed;
@@ -13,20 +14,27 @@ trait CanRedeemVouchers
 {
     /**
      * @param string $code
-     * @throws VoucherExpired
+     * @return Voucher
      * @throws VoucherIsInvalid
-     * @throws VoucherAlreadyRedeemed
-     * @return mixed
+     * @throws VoucherAlreadyRedeemed|VoucherExpired|VoucherAlreadyMaxUsed
      */
-    public function redeemCode(string $code)
+    public function redeemCode(string $code): Voucher
     {
         $voucher = Vouchers::check($code);
 
-        if ($voucher->users()->wherePivot('user_id', $this->id)->exists()) {
-            throw VoucherAlreadyRedeemed::create($voucher);
-        }
         if ($voucher->isExpired()) {
             throw VoucherExpired::create($voucher);
+        }
+
+        if($voucher->use_count != 1){
+            if($voucher->isMaxUsed()){
+                throw VoucherAlreadyMaxUsed::create($voucher);
+            }
+            $voucher->used_count++;
+        }else{
+            if ($voucher->users()->wherePivot('user_id', $this->id)->exists()) {
+                throw VoucherAlreadyRedeemed::create($voucher);
+            }
         }
 
         $this->vouchers()->attach($voucher, [
@@ -40,12 +48,12 @@ trait CanRedeemVouchers
 
     /**
      * @param Voucher $voucher
-     * @throws VoucherExpired
+     * @return Voucher
      * @throws VoucherIsInvalid
-     * @throws VoucherAlreadyRedeemed
-     * @return mixed
+     * @throws VoucherAlreadyRedeemed|VoucherAlreadyMaxUsed
+     * @throws VoucherExpired
      */
-    public function redeemVoucher(Voucher $voucher)
+    public function redeemVoucher(Voucher $voucher): Voucher
     {
         return $this->redeemCode($voucher->code);
     }

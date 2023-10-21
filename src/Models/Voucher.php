@@ -4,6 +4,8 @@ namespace BeyondCode\Vouchers\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Voucher extends Model
 {
@@ -17,7 +19,9 @@ class Voucher extends Model
         'model_type',
         'code',
         'data',
-        'expires_at'
+        'expires_at',
+        'use_count',
+        'used_count'
     ];
 
     /**
@@ -40,17 +44,17 @@ class Voucher extends Model
     /**
      * Get the users who redeemed this voucher.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(config('vouchers.user_model'), config('vouchers.relation_table'))->withPivot('redeemed_at');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return MorphTo
      */
-    public function model()
+    public function model(): MorphTo
     {
         return $this->morphTo();
     }
@@ -60,7 +64,7 @@ class Voucher extends Model
      *
      * @return bool
      */
-    public function isExpired()
+    public function isExpired(): bool
     {
         return $this->expires_at ? Carbon::now()->gte($this->expires_at) : false;
     }
@@ -70,8 +74,13 @@ class Voucher extends Model
      *
      * @return bool
      */
-    public function isNotExpired()
+    public function isNotExpired(): bool
     {
         return ! $this->isExpired();
+    }
+
+    public function isMaxUsed(): bool
+    {
+        return $this->use_count != null && $this->use_count <= ($this->used_count ?? 0);
     }
 }

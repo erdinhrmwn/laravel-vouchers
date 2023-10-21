@@ -20,6 +20,8 @@ class CreateVouchersTable extends Migration
             $table->morphs('model');
             $table->text('data')->nullable();
             $table->timestamp('expires_at')->nullable();
+            $table->bigInteger('use_count')->nullable();
+            $table->bigInteger('used_count')->nullable();
             $table->timestamps();
         });
 

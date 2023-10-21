@@ -2,6 +2,7 @@
 
 namespace BeyondCode\Vouchers\Rules;
 
+use BeyondCode\Vouchers\Exceptions\VoucherAlreadyMaxUsed;
 use Vouchers;
 use Illuminate\Contracts\Validation\Rule;
 use BeyondCode\Vouchers\Exceptions\VoucherExpired;
@@ -13,6 +14,7 @@ class Voucher implements Rule
     protected $isInvalid = false;
     protected $isExpired = false;
     protected $wasRedeemed = false;
+    protected $maxUsed = false;
 
     /**
      * Determine if the validation rule passes.
@@ -39,6 +41,9 @@ class Voucher implements Rule
         } catch (VoucherAlreadyRedeemed $exception) {
             $this->wasRedeemed = true;
             return false;
+        } catch (VoucherAlreadyMaxUsed $exception) {
+            $this->maxUsed = true;
+            return false;
         }
 
         return true;
@@ -49,13 +54,16 @@ class Voucher implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         if ($this->wasRedeemed) {
             return trans('vouchers::validation.code_redeemed');
         }
         if ($this->isExpired) {
             return trans('vouchers::validation.code_expired');
+        }
+        if ($this->maxUsed) {
+            return trans('vouchers::validation.code_max_used');
         }
         return trans('vouchers::validation.code_invalid');
     }

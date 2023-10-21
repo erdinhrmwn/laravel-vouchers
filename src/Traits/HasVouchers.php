@@ -21,11 +21,12 @@ trait HasVouchers
      * @param int $amount
      * @param array $data
      * @param null $expires_at
-     * @return Voucher[]
+     * @param int $use_count
+     * @return array
      */
-    public function createVouchers(int $amount, array $data = [], $expires_at = null)
+    public function createVouchers(int $amount, array $data = [], $expires_at = null, int $use_count = 1): array
     {
-        return Vouchers::create($this, $amount, $data, $expires_at);
+        return Vouchers::create($this, $amount, $data, $expires_at, $use_count);
     }
 
     /**
@@ -33,7 +34,7 @@ trait HasVouchers
      * @param null $expires_at
      * @return Voucher
      */
-    public function createVoucher(array $data = [], $expires_at = null)
+    public function createVoucher(array $data = [], $expires_at = null): Voucher
     {
         return $this->createVouchers(1, $data, $expires_at)[0];
     }

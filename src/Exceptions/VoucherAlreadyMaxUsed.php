@@ -5,13 +5,13 @@ namespace BeyondCode\Vouchers\Exceptions;
 use BeyondCode\Vouchers\Models\Voucher;
 use Exception;
 
-class VoucherAlreadyRedeemed extends Exception
+class VoucherAlreadyMaxUsed extends Exception
 {
-    protected $message = 'The voucher was already redeemed.';
+    protected $message = 'The voucher code was already reached its usage limit.';
 
     protected $voucher;
 
-    public static function create(Voucher $voucher): VoucherAlreadyRedeemed
+    public static function create(Voucher $voucher): VoucherAlreadyMaxUsed
     {
         return new static($voucher);
     }

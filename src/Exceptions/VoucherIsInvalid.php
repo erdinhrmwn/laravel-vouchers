@@ -2,7 +2,9 @@
 
 namespace BeyondCode\Vouchers\Exceptions;
 
-class VoucherIsInvalid extends \Exception
+use Exception;
+
+class VoucherIsInvalid extends Exception
 {
     protected $code;
 

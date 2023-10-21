@@ -3,8 +3,9 @@
 namespace BeyondCode\Vouchers\Exceptions;
 
 use BeyondCode\Vouchers\Models\Voucher;
+use Exception;
 
-class VoucherExpired extends \Exception
+class VoucherExpired extends Exception
 {
     protected $message = 'The voucher is already expired.';
 
