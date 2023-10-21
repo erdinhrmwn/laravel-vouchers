@@ -59,7 +59,7 @@ class Vouchers
                 'data' => $data,
                 'expires_at' => $expires_at,
                 'use_count' => $use_count,
-                'used_count' => ($use_count == 1) ? null : 0
+                'used_count' => 0
             ]);
         }
 

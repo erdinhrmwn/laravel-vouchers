@@ -30,12 +30,13 @@ trait CanRedeemVouchers
             if($voucher->isMaxUsed()){
                 throw VoucherAlreadyMaxUsed::create($voucher);
             }
-            $voucher->used_count++;
-        }else{
-            if ($voucher->users()->wherePivot('user_id', $this->id)->exists()) {
-                throw VoucherAlreadyRedeemed::create($voucher);
-            }
         }
+
+        if ($voucher->users()->wherePivot('user_id', $this->id)->exists()) {
+            throw VoucherAlreadyRedeemed::create($voucher);
+        }
+
+        $voucher->used_count++;
 
         $this->vouchers()->attach($voucher, [
             'redeemed_at' => now()

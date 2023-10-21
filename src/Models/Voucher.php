@@ -81,6 +81,6 @@ class Voucher extends Model
 
     public function isMaxUsed(): bool
     {
-        return $this->use_count != null && $this->use_count <= ($this->used_count ?? 0);
+        return $this->use_count != null && $this->use_count <= $this->used_count;
     }
 }

@@ -38,11 +38,11 @@ class Voucher implements Rule
         } catch (VoucherExpired $exception) {
             $this->isExpired = true;
             return false;
-        } catch (VoucherAlreadyRedeemed $exception) {
-            $this->wasRedeemed = true;
-            return false;
         } catch (VoucherAlreadyMaxUsed $exception) {
             $this->maxUsed = true;
+            return false;
+        } catch (VoucherAlreadyRedeemed $exception) {
+            $this->wasRedeemed = true;
             return false;
         }
 
