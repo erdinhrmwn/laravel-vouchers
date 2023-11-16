@@ -57,7 +57,7 @@ class VoucherRuleTest extends TestCase
 
         $message = $validator->messages()->first('code');
 
-        $this->assertSame('The voucher code was already redeemed.', $message);
+        $this->assertSame('The voucher code is already redeemed.', $message);
     }
 
     /** @test */

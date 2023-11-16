@@ -31,7 +31,7 @@ class Voucher implements Rule
         try {
             $voucher = Vouchers::check($value);
 
-            // Check if the voucher was already redeemed
+            // Check if the voucher is already redeemed
             if (auth()->check() && $voucher->users()->wherePivot('user_id', auth()->id())->exists()) {
                 throw VoucherAlreadyRedeemed::create($voucher);
             }
