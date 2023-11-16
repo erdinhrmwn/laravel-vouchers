@@ -7,7 +7,7 @@ use Exception;
 
 class VoucherAlreadyRedeemed extends Exception
 {
-    protected $message = 'The voucher was already redeemed.';
+    protected $message = 'The voucher is already redeemed.';
 
     protected $voucher;
 

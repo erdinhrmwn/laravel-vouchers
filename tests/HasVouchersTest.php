@@ -2,7 +2,7 @@
 
 namespace BeyondCode\Vouchers\Tests;
 
-use Vouchers;
+use BeyondCode\Vouchers\Facades\Vouchers;
 use BeyondCode\Vouchers\Tests\Models\Item;
 
 class HasVouchersTest extends TestCase
@@ -22,7 +22,7 @@ class HasVouchersTest extends TestCase
     /** @test */
     public function models_can_create_vouchers_associated_to_them()
     {
-        $item = Item::create(['name' => 'Foo']);
+        $item    = Item::create(['name' => 'Foo']);
         $voucher = $item->createVoucher();
 
         $this->assertCount(1, $item->vouchers()->get());
@@ -33,7 +33,7 @@ class HasVouchersTest extends TestCase
     /** @test */
     public function models_can_create_multiple_vouchers_associated_to_them()
     {
-        $item = Item::create(['name' => 'Foo']);
+        $item     = Item::create(['name' => 'Foo']);
         $vouchers = $item->createVouchers(2);
 
         $this->assertCount(2, $item->vouchers()->get());

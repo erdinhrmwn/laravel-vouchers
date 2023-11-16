@@ -6,46 +6,49 @@ use Illuminate\Support\Str;
 
 class VoucherGenerator
 {
-    protected $characters;
-    protected $mask;
-    protected $prefix;
-    protected $suffix;
-    protected $separator = '-';
-    protected $generatedCodes = [];
+    protected string $characters;
+
+    protected string $mask;
+
+    protected ?string $prefix = null;
+
+    protected ?string $suffix = null;
+
+    protected string $separator = '-';
+
+    protected array $generatedCodes = [];
 
     public function __construct(string $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ234567890', string $mask = '****-****')
     {
         $this->characters = $characters;
-        $this->mask = $mask;
+        $this->mask       = $mask;
     }
 
-    /**
-     * @param string|null $prefix
-     */
     public function setPrefix(?string $prefix): void
     {
         $this->prefix = $prefix;
     }
 
-    /**
-     * @param string|null $suffix
-     */
     public function setSuffix(?string $suffix): void
     {
         $this->suffix = $suffix;
     }
 
-    /**
-     * @param string $separator
-     */
     public function setSeparator(string $separator): void
     {
         $this->separator = $separator;
     }
 
-    /**
-     * @return string
-     */
+    protected function getPrefix(): string
+    {
+        return $this->prefix !== null ? $this->prefix . $this->separator : '';
+    }
+
+    protected function getSuffix(): string
+    {
+        return $this->suffix !== null ? $this->separator . $this->suffix : '';
+    }
+
     public function generateUnique(): string
     {
         $code = $this->generate();
@@ -58,15 +61,12 @@ class VoucherGenerator
         return $code;
     }
 
-    /**
-     * @return string
-     */
     public function generate(): string
     {
         $length = substr_count($this->mask, '*');
 
-        $code = $this->getPrefix();
-        $mask = $this->mask;
+        $code       = $this->getPrefix();
+        $mask       = $this->mask;
         $characters = collect(str_split($this->characters));
 
         for ($i = 0; $i < $length; $i++) {
@@ -78,21 +78,4 @@ class VoucherGenerator
 
         return $code;
     }
-
-    /**
-     * @return string
-     */
-    protected function getPrefix(): string
-    {
-        return $this->prefix !== null ? $this->prefix . $this->separator : '';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getSuffix(): string
-    {
-        return $this->suffix !== null ? $this->separator . $this->suffix : '';
-    }
-
 }

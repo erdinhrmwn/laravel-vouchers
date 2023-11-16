@@ -3,54 +3,103 @@
 return [
 
     /*
-     * Database table name that will be used in migration
-     */
+    |--------------------------------------------------------------------------
+    | Voucher Table
+    |--------------------------------------------------------------------------
+    |
+    | Database table name that will be used in migration
+    |
+    */
+
     'table' => 'vouchers',
 
     /*
-     * Model to use
-     */
+    |--------------------------------------------------------------------------
+    | Voucher Model
+    |--------------------------------------------------------------------------
+    |
+    | Model name that will be used
+    |
+    */
+
     'model' => BeyondCode\Vouchers\Models\Voucher::class,
 
     /*
-     * Database pivot table name for vouchers and users relation
-     */
+    |--------------------------------------------------------------------------
+    | Voucher Pivot
+    |--------------------------------------------------------------------------
+    |
+    | Database pivot table name for vouchers and users relation
+    |
+    */
+
     'relation_table' => 'user_voucher',
 
     /*
-     * List of characters that will be used for voucher code generation.
-     */
-    'characters' => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
+    |--------------------------------------------------------------------------
+    | Voucher Characters
+    |--------------------------------------------------------------------------
+    |
+    | List of characters that will be used for voucher code generation.
+    |
+    */
+
+    'characters' => '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ',
 
     /*
-     * Voucher code prefix.
-     *
-     * Example: foo
-     * Generated Code: foo-AGXF-1NH8
-     */
+    |--------------------------------------------------------------------------
+    | Voucher Code Prefix
+    |--------------------------------------------------------------------------
+    |
+    | Example: foo
+    | Generated Code: foo-ABCD-1NH8
+    |
+    */
+
     'prefix' => null,
 
     /*
-     * Voucher code suffix.
-     *
-     * Example: foo
-     * Generated Code: AGXF-1NH8-foo
-     */
+    |--------------------------------------------------------------------------
+    | Voucher Code Suffix
+    |--------------------------------------------------------------------------
+    |
+    | Example: foo
+    | Generated Code: ABCD-1NH8-foo
+    |
+    */
+
     'suffix' => null,
 
     /*
-     * Code mask.
-     * All asterisks will be removed by random characters.
-     */
+    |--------------------------------------------------------------------------
+    | Voucher Code Mask
+    |--------------------------------------------------------------------------
+    |
+    | All asterisks will be removed by random characters.
+    |
+    */
+
     'mask' => '****-****',
 
     /*
-     * Separator to be used between prefix, code and suffix.
-     */
+    |--------------------------------------------------------------------------
+    | Voucher Code Separator
+    |--------------------------------------------------------------------------
+    |
+    | Separator to be used between prefix, code and suffix.
+    |
+    */
+
     'separator' => '-',
 
     /*
-     * The user model that belongs to vouchers.
-     */
+    |--------------------------------------------------------------------------
+    | Voucher User Model
+    |--------------------------------------------------------------------------
+    |
+    | The user model that belongs to vouchers.
+    |
+    */
+
     'user_model' => \App\User::class,
 ];

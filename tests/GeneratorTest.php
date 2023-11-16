@@ -10,9 +10,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public function it_uses_specified_characters_only()
     {
         $generator = new VoucherGenerator('1234567890', '********');
-        $voucher = $generator->generate();
+        $voucher   = $generator->generate();
 
-        $this->assertRegExp('/^[0-9]/', $voucher);
+        $this->assertMatchesRegularExpression('/^[0-9]/', $voucher);
     }
 
     /** @test */
@@ -55,8 +55,8 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public function it_generates_code_with_mask()
     {
         $generator = new VoucherGenerator('ABCDEFGH', '* * * *');
-        $voucher = $generator->generate();
+        $voucher   = $generator->generate();
 
-        $this->assertRegExp('/(.*)\s(.*)\s(.*)\s(.*)/', $voucher);
+        $this->assertMatchesRegularExpression('/(.*)\s(.*)\s(.*)\s(.*)/', $voucher);
     }
 }

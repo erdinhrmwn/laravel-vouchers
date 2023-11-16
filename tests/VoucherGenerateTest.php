@@ -2,7 +2,7 @@
 
 namespace BeyondCode\Vouchers\Tests;
 
-use Vouchers;
+use BeyondCode\Vouchers\Facades\Vouchers;
 
 class VoucherGenerateTest extends TestCase
 {

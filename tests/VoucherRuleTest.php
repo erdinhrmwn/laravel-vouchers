@@ -2,21 +2,20 @@
 
 namespace BeyondCode\Vouchers\Tests;
 
-use Vouchers;
-use Validator;
+use BeyondCode\Vouchers\Facades\Vouchers;
 use BeyondCode\Vouchers\Rules\Voucher;
-use BeyondCode\Vouchers\Tests\Models\User;
 use BeyondCode\Vouchers\Tests\Models\Item;
+use BeyondCode\Vouchers\Tests\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class VoucherRuleTest extends TestCase
 {
-
     /**
      * @return \Illuminate\Validation\Validator
      */
     protected function validator($code)
     {
-        return Validator::make(['code' => $code], ['code' => new Voucher()]);
+        return Validator::make(['code' => $code], ['code' => new Voucher]);
     }
 
     /** @test */
@@ -44,7 +43,7 @@ class VoucherRuleTest extends TestCase
     /** @test */
     public function it_returns_correct_error_messages_for_redeemed_vouchers()
     {
-        $item = Item::create(['name' => 'Foo']);
+        $item     = Item::create(['name' => 'Foo']);
         $vouchers = Vouchers::create($item);
 
         $user = User::first();
@@ -64,8 +63,8 @@ class VoucherRuleTest extends TestCase
     /** @test */
     public function it_returns_correct_error_messages_for_expired_vouchers()
     {
-        $item = Item::create(['name' => 'Foo']);
-        $vouchers = Vouchers::create($item, 1, [], now()->subDay(1));
+        $item     = Item::create(['name' => 'Foo']);
+        $vouchers = Vouchers::create($item, 1, [], now()->subDay());
 
         $validator = $this->validator($vouchers[0]->code);
 
@@ -75,5 +74,4 @@ class VoucherRuleTest extends TestCase
 
         $this->assertSame('The voucher code is already expired.', $message);
     }
-
 }

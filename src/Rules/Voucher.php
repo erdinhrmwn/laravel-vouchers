@@ -3,27 +3,22 @@
 namespace BeyondCode\Vouchers\Rules;
 
 use BeyondCode\Vouchers\Exceptions\VoucherAlreadyMaxUsed;
-use Vouchers;
-use Illuminate\Contracts\Validation\Rule;
-use BeyondCode\Vouchers\Exceptions\VoucherExpired;
-use BeyondCode\Vouchers\Exceptions\VoucherIsInvalid;
 use BeyondCode\Vouchers\Exceptions\VoucherAlreadyRedeemed;
+use BeyondCode\Vouchers\Exceptions\VoucherExpired;
+use BeyondCode\Vouchers\Exceptions\VoucherInvalid;
+use BeyondCode\Vouchers\Facades\Vouchers;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class Voucher implements Rule
+class Voucher implements ValidationRule
 {
-    protected $isInvalid = false;
-    protected $isExpired = false;
-    protected $wasRedeemed = false;
-    protected $maxUsed = false;
-
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string $attribute
-     * @param  mixed $value
-     * @return bool
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
-    public function passes($attribute, $value)
+    public function validate($attribute, $value, $fail): void
     {
         try {
             $voucher = Vouchers::check($value);
@@ -32,39 +27,14 @@ class Voucher implements Rule
             if (auth()->check() && $voucher->users()->wherePivot('user_id', auth()->id())->exists()) {
                 throw VoucherAlreadyRedeemed::create($voucher);
             }
-        } catch (VoucherIsInvalid $exception) {
-            $this->isInvalid = true;
-            return false;
+        } catch (VoucherInvalid $exception) {
+            $fail(trans('vouchers::validation.code_invalid'));
         } catch (VoucherExpired $exception) {
-            $this->isExpired = true;
-            return false;
+            $fail(trans('vouchers::validation.code_expired'));
         } catch (VoucherAlreadyMaxUsed $exception) {
-            $this->maxUsed = true;
-            return false;
+            $fail(trans('vouchers::validation.code_max_used'));
         } catch (VoucherAlreadyRedeemed $exception) {
-            $this->wasRedeemed = true;
-            return false;
+            $fail(trans('vouchers::validation.code_redeemed'));
         }
-
-        return true;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message(): string
-    {
-        if ($this->wasRedeemed) {
-            return trans('vouchers::validation.code_redeemed');
-        }
-        if ($this->isExpired) {
-            return trans('vouchers::validation.code_expired');
-        }
-        if ($this->maxUsed) {
-            return trans('vouchers::validation.code_max_used');
-        }
-        return trans('vouchers::validation.code_invalid');
     }
 }

@@ -21,7 +21,7 @@ class Voucher extends Model
         'data',
         'expires_at',
         'use_count',
-        'used_count'
+        'used_count',
     ];
 
     /**
@@ -30,7 +30,7 @@ class Voucher extends Model
      * @var array
      */
     protected $casts = [
-        'data' => 'collection',
+        'data'       => 'collection',
         'expires_at' => 'date',
     ];
 
@@ -43,17 +43,12 @@ class Voucher extends Model
 
     /**
      * Get the users who redeemed this voucher.
-     *
-     * @return BelongsToMany
      */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(config('vouchers.user_model'), config('vouchers.relation_table'))->withPivot('redeemed_at');
     }
 
-    /**
-     * @return MorphTo
-     */
     public function model(): MorphTo
     {
         return $this->morphTo();
@@ -61,8 +56,6 @@ class Voucher extends Model
 
     /**
      * Check if code is expired.
-     *
-     * @return bool
      */
     public function isExpired(): bool
     {
@@ -71,12 +64,10 @@ class Voucher extends Model
 
     /**
      * Check if code is not expired.
-     *
-     * @return bool
      */
     public function isNotExpired(): bool
     {
-        return ! $this->isExpired();
+        return !$this->isExpired();
     }
 
     public function isMaxUsed(): bool

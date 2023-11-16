@@ -11,22 +11,21 @@ class VouchersServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__.'/../translations', 'vouchers');
+        $this->loadTranslationsFrom(__DIR__ . '/../translations', 'vouchers');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('vouchers.php'),
+                __DIR__ . '/../config/config.php' => config_path('vouchers.php'),
             ], 'config');
 
-
-            if (! class_exists('CreateVouchersTable')) {
+            if (!class_exists('CreateVouchersTable')) {
                 $this->publishes([
-                    __DIR__.'/../database/migrations/create_vouchers_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_vouchers_table.php'),
+                    __DIR__ . '/../database/migrations/create_vouchers_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_vouchers_table.php'),
                 ], 'migrations');
             }
 
             $this->publishes([
-                __DIR__.'/../translations' => resource_path('lang/vendor/vouchers'),
+                __DIR__ . '/../translations' => resource_path('lang/vendor/vouchers'),
             ], 'translations');
         }
     }
@@ -36,7 +35,7 @@ class VouchersServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'vouchers');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'vouchers');
 
         $this->app->singleton('vouchers', function ($app) {
             $generator = new VoucherGenerator(config('vouchers.characters'), config('vouchers.mask'));

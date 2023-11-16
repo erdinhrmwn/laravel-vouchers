@@ -2,14 +2,13 @@
 
 namespace BeyondCode\Vouchers\Tests;
 
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Database\Schema\Blueprint;
 use BeyondCode\Vouchers\Facades\Vouchers;
 use BeyondCode\Vouchers\VouchersServiceProvider;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Auth\User;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -42,9 +41,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('database.default', 'sqlite');
 
         $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
 
         $app['config']->set('app.key', 'base64:6Cu/ozj4gPtIjmXjr8EdVnGFNsdRqZfHfVjQkmTlg4Y=');
@@ -52,8 +51,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function setUpDatabase()
     {
-        include_once __DIR__.'/../database/migrations/create_vouchers_table.php.stub';
-        (new \CreateVouchersTable())->up();
+        include_once __DIR__ . '/../database/migrations/create_vouchers_table.php.stub';
+        (new \CreateVouchersTable)->up();
 
         $this->app['db']->connection()->getSchemaBuilder()->create('items', function (Blueprint $table) {
             $table->increments('id');
@@ -65,11 +64,19 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function createUser()
     {
         User::forceCreate([
-            'name' => 'User',
-            'email' => 'user@email.com',
-            'password' => 'test'
+            'name'     => 'User',
+            'email'    => 'user@email.com',
+            'password' => 'test',
+        ]);
+        User::forceCreate([
+            'name'     => 'User1',
+            'email'    => 'user1@email.com',
+            'password' => 'test',
+        ]);
+        User::forceCreate([
+            'name'     => 'User2',
+            'email'    => 'user2@email.com',
+            'password' => 'test',
         ]);
     }
-
-
 }

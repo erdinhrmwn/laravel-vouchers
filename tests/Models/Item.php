@@ -2,8 +2,8 @@
 
 namespace BeyondCode\Vouchers\Tests\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use BeyondCode\Vouchers\Traits\HasVouchers;
+use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {

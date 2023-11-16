@@ -7,7 +7,7 @@ use Exception;
 
 class VoucherAlreadyMaxUsed extends Exception
 {
-    protected $message = 'The voucher code was already reached its usage limit.';
+    protected $message = 'The voucher code is already reached its usage limit.';
 
     protected $voucher;
 

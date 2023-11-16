@@ -121,7 +121,7 @@ $videoCourse = VideoCourse::find(1);
 $vouchers = Vouchers::create($videoCourse, 5);
 ```
 
-The return value is an array containing all generated `Voucher` models. 
+The return value is an array containing all generated `Voucher` models.
 
 The Voucher model has a property `code` which contains the generated voucher code.
 
@@ -182,7 +182,7 @@ In case you want to redeem an existing Voucher model, you can use the `redeemVou
 
 ```php
 $user->redeemVoucher($voucher);
-``` 
+```
 
 After a user successfully redeemed a voucher, this package will fire a `BeyondCode\Vouchers\Events\VoucherRedeemed` event. The event contains the user instance and the voucher instance.
 You should listen to this event in order to perform the business logic of your application, when a user redeems a voucher.
@@ -195,7 +195,7 @@ The `Voucher` model has a `model` relation, that will point to the associated El
 $voucher = $user->redeemCode('ABCD-EFGH');
 
 $videoCourse = $voucher->model;
-``` 
+```
 
 ## Handling Errors
 
@@ -203,7 +203,7 @@ The `redeemCode` and `redeemVoucher` methods throw a couple of exceptions that y
 
 ### Voucher invalid
 
-If a user tries to redeem an invalid code, the package will throw the following exception: `BeyondCode\Vouchers\Exceptions\VoucherIsInvalid`.
+If a user tries to redeem an invalid code, the package will throw the following exception: `BeyondCode\Vouchers\Exceptions\VoucherInvalid`.
 
 ### Voucher already redeemed
 
@@ -213,10 +213,9 @@ All generated vouchers can only be redeemed once. If a user tries to redeem a vo
 
 If a user tries to redeem an expired voucher code, the package will throw the following exception: `BeyondCode\Vouchers\Exceptions\VoucherExpired`.
 
-
 ### Testing
 
-``` bash
+```bash
 composer test
 ```
 
@@ -234,8 +233,8 @@ If you discover any security related issues, please email marcel@beyondco.de ins
 
 ## Credits
 
-- [Marcel Pociot](https://github.com/mpociot)
-- [All Contributors](../../contributors)
+-   [Marcel Pociot](https://github.com/mpociot)
+-   [All Contributors](../../contributors)
 
 This package is heavily based on the Laravel Promocodes package from [Zura Gabievi](https://github.com/zgabievi). You can find the code on [GitHub](https://github.com/zgabievi/laravel-promocodes).
 
