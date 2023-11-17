@@ -18,7 +18,7 @@ class VoucherGenerator
 
     protected array $generatedCodes = [];
 
-    public function __construct(string $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ234567890', string $mask = '****-****')
+    public function __construct(string $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ01234567890', string $mask = '****-****')
     {
         $this->characters = $characters;
         $this->mask       = $mask;

@@ -70,8 +70,12 @@ class Voucher extends Model
         return !$this->isExpired();
     }
 
+
+    /**
+     * Check if code is max used.
+     */
     public function isMaxUsed(): bool
     {
-        return $this->use_count != null && $this->use_count <= $this->used_count;
+        return $this->use_count != 1 && $this->use_count <= $this->used_count;
     }
 }
